@@ -1,0 +1,23 @@
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-size: 16px;
+}
+
+@layer utilities {
+    .safe-bottom {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    .sticky-above-nav {
+        bottom: calc(4.25rem + max(1rem, env(safe-area-inset-bottom)));
+    }
+}
+

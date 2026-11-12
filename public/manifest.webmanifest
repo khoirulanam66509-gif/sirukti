@@ -1,0 +1,32 @@
+{
+    "name": "SIRUKTI — Sistem Layanan Surat Digital Kampung Rukti Harjo",
+    "short_name": "SIRUKTI",
+    "description": "Layanan pengajuan surat administrasi mandiri Kampung Rukti Harjo, Kecamatan Seputih Raman, Kabupaten Lampung Tengah.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#F2F5EF",
+    "theme_color": "#2F5D3A",
+    "lang": "id-ID",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ]
+}
