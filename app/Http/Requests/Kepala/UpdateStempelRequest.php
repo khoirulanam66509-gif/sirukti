@@ -26,7 +26,7 @@ class UpdateStempelRequest extends FormRequest
             'file_stempel' => [
                 'required',
                 'file',
-                'mimes:png,jpg,jpeg,webp',
+                'mimes:png,jpg,jpeg',
                 'max:1024', // maks 1MB
             ],
         ];
@@ -42,7 +42,7 @@ class UpdateStempelRequest extends FormRequest
         return [
             'file_stempel.required' => 'Silakan pilih berkas gambar stempel resmi kampung.',
             'file_stempel.file' => 'Berkas stempel tidak valid.',
-            'file_stempel.mimes' => 'Format berkas stempel harus berupa gambar PNG, JPG, JPEG, atau WEBP.',
+            'file_stempel.mimes' => 'Format berkas stempel harus berupa gambar PNG, JPG, atau JPEG.',
             'file_stempel.max' => 'Ukuran berkas stempel maksimal 1 MB (1024 KB).',
         ];
     }

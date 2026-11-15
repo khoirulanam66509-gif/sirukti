@@ -171,9 +171,9 @@
 
                     <div class="space-y-2 text-xs">
                         @foreach($pengajuan->data_isian ?? [] as $k => $v)
-                            <div class="flex justify-between py-1 border-b border-border-soft/40">
+                            <div class="flex items-start justify-between gap-3 py-1.5 border-b border-border-soft/40">
                                 <span class="text-ink-muted">{{ ucwords(str_replace('_', ' ', $k)) }}</span>
-                                <span class="font-bold text-ink text-right max-w-[200px] truncate">
+                                <span class="font-bold text-ink text-right max-w-[65%] break-words">
                                     @if(str_contains($k, 'penghasilan') || str_contains($k, 'modal'))
                                         {{ is_numeric($v) ? rupiah((int)$v) : $v }}
                                     @elseif(str_contains($k, 'tahun') && is_numeric($v))

@@ -59,7 +59,13 @@ class BerkasService
     {
         $this->validasiBerkas($file);
 
-        $extension = $file->getClientOriginalExtension() ?: 'bin';
+        $mime = $file->getMimeType();
+        $extension = match ($mime) {
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'application/pdf' => 'pdf',
+            default => 'bin',
+        };
         $safeName = Str::random(40).'.'.$extension;
         $folder = "berkas/{$idPengajuan}";
 
@@ -76,7 +82,7 @@ class BerkasService
             [
                 'nama_file_asli' => substr($file->getClientOriginalName(), 0, 150),
                 'path_file' => $path,
-                'mime' => $file->getMimeType(),
+                'mime' => $mime,
                 'ukuran_kb' => $ukuranKb,
                 'status_verifikasi' => 'menunggu',
                 'catatan' => null,
@@ -119,14 +125,15 @@ class BerkasService
         }
 
         $fullPath = Storage::disk('local')->path($berkas->path_file);
+        $safeFilename = str_replace(['"', "\r", "\n", '\\', '/'], '_', $berkas->nama_file_asli ?: 'berkas');
 
         if ($unduh) {
-            return response()->download($fullPath, $berkas->nama_file_asli);
+            return response()->download($fullPath, $safeFilename);
         }
 
         return response()->file($fullPath, [
             'Content-Type' => $berkas->mime,
-            'Content-Disposition' => 'inline; filename="'.addslashes($berkas->nama_file_asli).'"',
+            'Content-Disposition' => 'inline; filename="'.$safeFilename.'"',
         ]);
     }
 }

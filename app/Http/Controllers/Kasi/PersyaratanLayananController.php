@@ -64,6 +64,8 @@ class PersyaratanLayananController extends Controller
      */
     public function updateSyarat(UpdateSyaratRequest $request, Layanan $layanan, SyaratLayanan $syarat): RedirectResponse
     {
+        abort_if($syarat->id_layanan !== $layanan->id_layanan, 404);
+
         $validated = $request->validated();
 
         $syarat->update([
@@ -90,6 +92,8 @@ class PersyaratanLayananController extends Controller
      */
     public function destroySyarat(Layanan $layanan, SyaratLayanan $syarat): RedirectResponse
     {
+        abort_if($syarat->id_layanan !== $layanan->id_layanan, 404);
+
         // Pengecekan integritas: syarat yang sudah dipakai berkas tidak boleh dihapus
         if ($syarat->berkas()->exists()) {
             return redirect()->route('kasi.layanan.index', ['layanan_id' => $layanan->id_layanan])
@@ -116,6 +120,8 @@ class PersyaratanLayananController extends Controller
      */
     public function toggleStatusSyarat(Layanan $layanan, SyaratLayanan $syarat): RedirectResponse
     {
+        abort_if($syarat->id_layanan !== $layanan->id_layanan, 404);
+
         $statusBaru = ! $syarat->status_aktif;
         $syarat->update(['status_aktif' => $statusBaru]);
 

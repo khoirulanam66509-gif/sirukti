@@ -14,7 +14,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerifikasiController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/', [LandingController::class, 'index'])
+    ->middleware('throttle:60,1')
+    ->name('landing');
 Route::get('/lacak', [LacakPengajuanController::class, 'index'])
     ->middleware('throttle:60,1')
     ->name('lacak');

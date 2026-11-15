@@ -154,7 +154,7 @@
                         <div class="relative border-2 border-dashed border-border-soft hover:border-primary rounded-2xl p-4 text-center cursor-pointer bg-canvas/40 hover:bg-canvas transition group">
                             <input type="file"
                                    name="file_ttd"
-                                   accept="image/png,image/jpeg,image/webp"
+                                   accept="image/png,image/jpeg"
                                    @change="handleFileChange($event)"
                                    required
                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -279,7 +279,7 @@
                         <div class="relative border-2 border-dashed border-border-soft hover:border-primary rounded-2xl p-4 text-center cursor-pointer bg-canvas/40 hover:bg-canvas transition group">
                             <input type="file"
                                    name="file_stempel"
-                                   accept="image/png,image/jpeg,image/webp"
+                                   accept="image/png,image/jpeg"
                                    @change="handleFileChange($event)"
                                    required
                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">

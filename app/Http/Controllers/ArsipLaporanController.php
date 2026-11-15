@@ -225,8 +225,8 @@ class ArsipLaporanController extends Controller
             fputcsv($handle, ['Kode Layanan', 'Nama Layanan', 'Total Pengajuan', 'Selesai', 'Berjalan', 'Ditolak', 'Rata-rata Waktu Selesai (Jam)']);
             foreach ($rekapLayanan as $r) {
                 fputcsv($handle, [
-                    $r->kode,
-                    $r->nama_layanan,
+                    $this->sanitizeCsvValue($r->kode),
+                    $this->sanitizeCsvValue($r->nama_layanan),
                     $r->total,
                     $r->selesai,
                     $r->berjalan,
@@ -254,16 +254,16 @@ class ArsipLaporanController extends Controller
             foreach ($pengajuanList as $idx => $p) {
                 fputcsv($handle, [
                     $idx + 1,
-                    $p->no_pengajuan,
-                    $p->surat?->no_surat ?? '-',
-                    $p->layanan?->kode ?? '-',
-                    $p->layanan?->nama_layanan ?? '-',
-                    $p->warga?->pengguna?->nama ?? '-',
-                    samarkan_nik($p->warga?->nik),
+                    $this->sanitizeCsvValue($p->no_pengajuan),
+                    $this->sanitizeCsvValue($p->surat?->no_surat ?? '-'),
+                    $this->sanitizeCsvValue($p->layanan?->kode ?? '-'),
+                    $this->sanitizeCsvValue($p->layanan?->nama_layanan ?? '-'),
+                    $this->sanitizeCsvValue($p->warga?->pengguna?->nama ?? '-'),
+                    $this->sanitizeCsvValue(samarkan_nik($p->warga?->nik)),
                     $p->tgl_pengajuan ? $p->tgl_pengajuan->format('d/m/Y H:i') : '-',
                     $p->tgl_selesai ? $p->tgl_selesai->format('d/m/Y H:i') : '-',
                     strtoupper(str_replace('_', ' ', $p->status)),
-                    $p->verifikator?->nama ?? '-',
+                    $this->sanitizeCsvValue($p->verifikator?->nama ?? '-'),
                 ]);
             }
 
@@ -356,5 +356,19 @@ class ArsipLaporanController extends Controller
         );
 
         return redirect()->back()->with('status', "Arsip permohonan #{$noPengajuan} berhasil dipindahkan ke arsip terhapus (soft delete).");
+    }
+
+    /**
+     * Mencegah CSV formula injection (DDE) pada nilai teks dinamis.
+     */
+    protected function sanitizeCsvValue(mixed $value): string
+    {
+        $text = (string) ($value ?? '');
+
+        if ($text !== '' && $text !== '-' && in_array($text[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
+            return "'" . $text;
+        }
+
+        return $text;
     }
 }

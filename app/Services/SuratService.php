@@ -168,7 +168,7 @@ class SuratService
 
         return Pdf::loadView($viewName, $data)
             ->setPaper('a4', 'portrait')
-            ->setOption('isRemoteEnabled', true);
+            ->setOption('isRemoteEnabled', false);
     }
 
     /**

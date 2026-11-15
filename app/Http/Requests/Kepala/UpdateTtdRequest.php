@@ -26,7 +26,7 @@ class UpdateTtdRequest extends FormRequest
             'file_ttd' => [
                 'required',
                 'file',
-                'mimes:png,jpg,jpeg,webp',
+                'mimes:png,jpg,jpeg',
                 'max:1024', // maks 1MB
             ],
         ];
@@ -42,7 +42,7 @@ class UpdateTtdRequest extends FormRequest
         return [
             'file_ttd.required' => 'Silakan pilih berkas gambar tanda tangan Anda.',
             'file_ttd.file' => 'Berkas tanda tangan tidak valid.',
-            'file_ttd.mimes' => 'Format berkas tanda tangan harus berupa gambar PNG, JPG, JPEG, atau WEBP.',
+            'file_ttd.mimes' => 'Format berkas tanda tangan harus berupa gambar PNG, JPG, atau JPEG.',
             'file_ttd.max' => 'Ukuran berkas tanda tangan maksimal 1 MB (1024 KB).',
         ];
     }

@@ -9,7 +9,8 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('register', [RegisteredUserController::class, 'store'])
+        ->middleware('throttle:10,1');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
         ->name('password.change');
 
     Route::put('ubah-password', [PasswordController::class, 'update'])
+        ->middleware('throttle:10,1')
         ->name('password.update');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
