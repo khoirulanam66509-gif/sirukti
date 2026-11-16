@@ -212,12 +212,6 @@ class PengajuanController extends Controller
             return Storage::disk('private')->download($surat->file_pdf, "Surat_{$pengajuan->no_pengajuan}.pdf");
         }
 
-        if (Storage::disk('local')->exists($surat->file_pdf)) {
-            $fullPath = Storage::disk('local')->path($surat->file_pdf);
-
-            return response()->download($fullPath, "Surat_{$pengajuan->no_pengajuan}.pdf");
-        }
-
         abort(404, 'File PDF surat resmi tidak ditemukan di penyimpanan server.');
     }
 

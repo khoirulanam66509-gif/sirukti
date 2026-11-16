@@ -69,8 +69,8 @@ class BerkasService
         $safeName = Str::random(40).'.'.$extension;
         $folder = "berkas/{$idPengajuan}";
 
-        // Simpan ke disk privat (default 'local' di Laravel 12 -> storage/app/private)
-        $path = $file->storeAs($folder, $safeName, 'local');
+        // Simpan ke disk privat (lokal di development, S3/Supabase di production serverless)
+        $path = $file->storeAs($folder, $safeName, 'private');
 
         $ukuranKb = (int) max(1, ceil($file->getSize() / 1024));
 
@@ -95,8 +95,8 @@ class BerkasService
      */
     public function hapusFileFisik(string $path): bool
     {
-        if (Storage::disk('local')->exists($path)) {
-            return Storage::disk('local')->delete($path);
+        if (Storage::disk('private')->exists($path)) {
+            return Storage::disk('private')->delete($path);
         }
 
         return false;
@@ -108,8 +108,8 @@ class BerkasService
     public function hapusDirektoriPengajuan(int $idPengajuan): bool
     {
         $folder = "berkas/{$idPengajuan}";
-        if (Storage::disk('local')->exists($folder)) {
-            return Storage::disk('local')->deleteDirectory($folder);
+        if (Storage::disk('private')->directoryExists($folder) || Storage::disk('private')->exists($folder)) {
+            return Storage::disk('private')->deleteDirectory($folder);
         }
 
         return false;
@@ -120,20 +120,20 @@ class BerkasService
      */
     public function tanggapiBerkas(BerkasPengajuan $berkas, bool $unduh = false): BinaryFileResponse|StreamedResponse
     {
-        if (! Storage::disk('local')->exists($berkas->path_file)) {
+        $disk = Storage::disk('private');
+
+        if (! $disk->exists($berkas->path_file)) {
             abort(404, 'Berkas fisik tidak ditemukan di penyimpanan server.');
         }
 
-        $fullPath = Storage::disk('local')->path($berkas->path_file);
         $safeFilename = str_replace(['"', "\r", "\n", '\\', '/'], '_', $berkas->nama_file_asli ?: 'berkas');
 
         if ($unduh) {
-            return response()->download($fullPath, $safeFilename);
+            return $disk->download($berkas->path_file, $safeFilename);
         }
 
-        return response()->file($fullPath, [
+        return $disk->response($berkas->path_file, $safeFilename, [
             'Content-Type' => $berkas->mime,
-            'Content-Disposition' => 'inline; filename="'.$safeFilename.'"',
         ]);
     }
 }
