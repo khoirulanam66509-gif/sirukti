@@ -1,12 +1,8 @@
 /vendor
 /node_modules
-/public/build
 /public/hot
 /tests
 /storage/app/private/*
-/storage/logs/*
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
+/storage/logs/*.log
 .env
 .env.*
