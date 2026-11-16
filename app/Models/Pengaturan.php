@@ -33,13 +33,27 @@ class Pengaturan extends Model
     }
 
     /**
+     * Cache in-memory per request agar seluruh pemanggilan Pengaturan::ambil()
+     * cukup melakukan 1 query database.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected static ?array $cacheMemori = null;
+
+    /**
      * Mengambil nilai pengaturan berdasarkan kunci.
      */
     public static function ambil(string $kunci, $default = null)
     {
-        $setting = static::where('kunci', $kunci)->first();
+        if (static::$cacheMemori === null) {
+            static::$cacheMemori = static::all()
+                ->pluck('nilai', 'kunci')
+                ->all();
+        }
 
-        return $setting ? $setting->nilai : $default;
+        return array_key_exists($kunci, static::$cacheMemori) && static::$cacheMemori[$kunci] !== null
+            ? static::$cacheMemori[$kunci]
+            : $default;
     }
 
     /**
@@ -47,9 +61,15 @@ class Pengaturan extends Model
      */
     public static function simpan(string $kunci, array $nilai, ?int $idPengguna = null): static
     {
-        return static::updateOrCreate(
+        $record = static::updateOrCreate(
             ['kunci' => $kunci],
             ['nilai' => $nilai, 'id_pengguna' => $idPengguna]
         );
+
+        if (static::$cacheMemori !== null) {
+            static::$cacheMemori[$kunci] = $record->nilai;
+        }
+
+        return $record;
     }
 }

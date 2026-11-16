@@ -13,4 +13,13 @@ foreach ([
     }
 }
 
+// Gunakan cookie session terenkripsi & array cache di serverless untuk menghindari round-trip DB tambahan di setiap request.
+$_ENV['SESSION_DRIVER'] = 'cookie';
+$_SERVER['SESSION_DRIVER'] = 'cookie';
+putenv('SESSION_DRIVER=cookie');
+
+$_ENV['CACHE_STORE'] = 'array';
+$_SERVER['CACHE_STORE'] = 'array';
+putenv('CACHE_STORE=array');
+
 require __DIR__.'/../public/index.php';
